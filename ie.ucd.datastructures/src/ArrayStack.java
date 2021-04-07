@@ -21,7 +21,7 @@ public class ArrayStack<E> implements Stack<E> {
 		System.out.println(ll);
 		ll.pop();
 		System.out.println(ll);
-		ll.pop();
+		System.out.println(ll.pop());
 		System.out.println(ll);
 		System.out.println(ll.top());
 	}
@@ -61,7 +61,7 @@ public class ArrayStack<E> implements Stack<E> {
 	    if (t == -1)
 	        return null;
 	    else 
-	    	return data[0];
+	    	return data[t];
 	}
 
 	@Override
