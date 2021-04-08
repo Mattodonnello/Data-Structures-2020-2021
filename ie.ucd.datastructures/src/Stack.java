@@ -18,8 +18,9 @@ public interface Stack<E> {
 	 * Inserts an element at the top of the stack.
 	 * 
 	 * @param e the element to be inserted
+	 * @throws Exception 
 	 */
-	void push(E e);
+	void push(E e) throws Exception;
 
 	/**
 	 * Returns, but does not remove, the element at the top of the stack.
