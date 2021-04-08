@@ -17,8 +17,9 @@ public interface Queue<E> {
 	 * Inserts an element at the rear of the queue.
 	 * 
 	 * @param e the element to be inserted
+	 * @throws Exception 
 	 */
-	void enqueue(E e);
+	void enqueue(E e) throws Exception;
 
 	/**
 	 * Returns, but does not remove, the first element of the queue.
@@ -31,6 +32,7 @@ public interface Queue<E> {
 	 * Removes and returns the first element of the queue.
 	 * 
 	 * @return element removed (or null if empty)
+	 * @throws Exception 
 	 */
-	E dequeue();
+	E dequeue() throws Exception;
 }
