@@ -13,7 +13,7 @@ class LinkedQueueTest {
 	}
 
 	@Test
-	void testIsEmpty() {
+	void testIsEmpty() throws Exception {
 		LinkedQueue<Integer> s = new LinkedQueue<>();
 		for(int i = 0; i < 10; ++i)
 			s.enqueue(i);
@@ -39,7 +39,7 @@ class LinkedQueueTest {
 	}
 
 	@Test
-	void testDequeue() {
+	void testDequeue() throws Exception {
 		LinkedQueue<Integer> s = new LinkedQueue<>();
 		for(int i = 0; i < 10; ++i)
 			s.enqueue(i);
