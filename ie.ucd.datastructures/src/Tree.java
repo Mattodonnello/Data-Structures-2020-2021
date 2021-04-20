@@ -57,7 +57,6 @@ public interface Tree<E> extends Iterable<E> {
      * @throws IllegalArgumentException if p is not a valid Position for this tree.
      */
     boolean isExternal(Position<E> p) throws IllegalArgumentException;
-
     /**
      * Returns true if Position p represents the root of the tree.
      *

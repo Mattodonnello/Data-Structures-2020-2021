@@ -1,38 +1,74 @@
 public class LinkedStack<E> implements Stack<E> {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	private SinglyLinkedList<E> list = new SinglyLinkedList<>();
+	
+	// an empty list
+	public LinkedStack() {
+	} 
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		for(int i=0; i<list.size()-1; i++) {
+		sb.append(list.get(i));
+		sb.append(", ");	
+		}
+		sb.append(list.get(list.size() - 1));
+		sb.append("]");
+		return sb.toString();
+	}
 
+	public static void main(String[] args) {
+		LinkedStack <Integer> ll = new LinkedStack <Integer>();
+		for(int i = 0; i < 10; ++i)
+			ll.push(i);
+		for(int i = 0; i < 10; ++i) {
+		ll.pop();
+		}
+		System.out.println(ll);
+		
+		ll.push(1);
+		ll.push(2);
+		ll.push(3);
+		ll.push(4);
+		ll.push(5);
+		System.out.println(ll);
+		ll.pop();
+		System.out.println(ll);
+		System.out.println(ll.pop());
+		System.out.println(ll);
+		System.out.println(ll.top());
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+	return list.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+	if(list.size() == 0 || list.getLast() == null) {
+		return true;
+	}
+	else return false;
 	}
 
 	@Override
 	public void push(E e) {
-		// TODO Auto-generated method stub
-		
+	list.addFirst(e);	
 	}
 
 	@Override
 	public E top() {
-		// TODO Auto-generated method stub
-		return null;
+	E e = list.get(0);
+	return e;
 	}
 
 	@Override
 	public E pop() {
-		// TODO Auto-generated method stub
-		return null;
+	E e = list.get(0);
+	list.removeFirst();
+	return e;
 	}
 
 }
