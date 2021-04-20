@@ -15,11 +15,17 @@ public class LinkedStack<E> implements Stack<E> {
 		}
 		sb.append(list.get(list.size() - 1));
 		sb.append("]");
+		for(int i=0; i<list.size(); i++) {
+		sb.append(list.get(i));
+		sb.append(", ");	
+		}
+
 		return sb.toString();
 	}
 
 	public static void main(String[] args) {
 		LinkedStack <Integer> ll = new LinkedStack <Integer>();
+
 		for(int i = 0; i < 10; ++i)
 			ll.push(i);
 		for(int i = 0; i < 10; ++i) {
@@ -27,6 +33,7 @@ public class LinkedStack<E> implements Stack<E> {
 		}
 		System.out.println(ll);
 		
+
 		ll.push(1);
 		ll.push(2);
 		ll.push(3);
@@ -47,10 +54,11 @@ public class LinkedStack<E> implements Stack<E> {
 
 	@Override
 	public boolean isEmpty() {
+
 	if(list.size() == 0 || list.getLast() == null) {
 		return true;
 	}
-	else return false;
+	return false;
 	}
 
 	@Override
