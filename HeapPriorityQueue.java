@@ -209,7 +209,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	} 
 
 
-	public static void main_jdk(String [] args) {
+	public static void /*_jdk*/main(String [] args) {
 		//HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
 		PriorityQueue<Integer> pq = new PriorityQueue<>(new MaxComparator());
 		//Integer [] rands = new Integer[]{44,17,88,8,32,65,97,28,54,82,93,21,29,76,68,80};
