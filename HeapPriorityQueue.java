@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
  * An implementation of a priority queue using an array-based heap.
  */
 
+
 public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
 	protected ArrayList<Entry<K, V>> heap = new ArrayList<>();
@@ -39,33 +40,31 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 * @param values an array of the initial values for the priority queue
 	 */
 	public HeapPriorityQueue(K[] keys, V[] values) {
-		// TODO
+		super();
+	    for (int i=0; i < Math.min(keys.length, values.length); i++)
+	    heap.add(new PQEntry<>(keys[i], values[i]));
+	    heapify();
 	}
 
 	// protected utilities
 	protected int parent(int j) {
-		// TODO
-		return -1;
+		return (j-1) / 2;
 	}
 
 	protected int left(int j) {
-		// TODO
-		return -1;
+		return (2*j) + 1;
 	}
 
 	protected int right(int j) {
-		// TODO
-		return -1;
+		return (2*j) + 2;	
 	}
 
 	protected boolean hasLeft(int j) {
-		// TODO
-		return false;
+		return left(j) < heap.size();	
 	}
 
 	protected boolean hasRight(int j) {
-		// TODO
-		return false;
+		return right(j) < heap.size();
 	}
 
 	/** Exchanges the entries at indices i and j of the array list. */
@@ -81,20 +80,40 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 * property.
 	 */
 	protected void upheap(int j) {
-		// TODO
+		if (j <= 1) {
+		    return;
+		}
+		  int p = parent(j);
+		  if (compare(heap.get(j), heap.get(p)) >= 0) {
+		    return;
+		  }
+		  swap(j, p);
+		  upheap(p);
 	}
 
 	/**
 	 * Moves the entry at index j lower, if necessary, to restore the heap property.
 	 */
 	protected void downheap(int j) {
-		// TODO
-
+		if(hasLeft(j))
+        {
+                int smallerIndex = left(j);
+                if(hasRight(j) && compare(heap.get(right(j)), heap.get(left(j))) >= 1)
+                        smallerIndex = right(j);
+                if( compare(heap.get(smallerIndex), heap.get(j)) >= 1)
+                {
+                        swap(j, smallerIndex);
+                }
+                downheap(smallerIndex);
+        }
 	}
 
 	/** Performs a bottom-up construction of the heap in linear time. */
 	protected void heapify() {
-		// TODO
+		int startIndex = parent(size()-1);  
+	    for (int j=startIndex; j >= 0; j--) {
+	      downheap(j);
+	    }
 	}
 
 	// public methods
@@ -106,8 +125,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 */
 	@Override
 	public int size() {
-		// TODO
-		return -1;
+		return heap.size();
 	}
 
 	/**
@@ -117,7 +135,8 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 */
 	@Override
 	public Entry<K, V> min() {
-		return heap.get(0);
+		if (heap.isEmpty()) return null;
+		else return heap.get(0);
 	}
 
 	/**
@@ -130,9 +149,13 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 */
 	@Override
 	public Entry<K, V> insert(K key, V value) throws IllegalArgumentException {
-		// TODO
-		return null;
+		checkKey(key); // Throws exception jf the key is unacceptable
+	    Entry<K, V> newEntry = new PQEntry<>(key, value);
+	    heap.add(newEntry);                
+	    upheap(heap.size() - 1);               
+	    return newEntry; // return the entry storing the new key-value pair
 	}
+	
 
 	/**
 	 * Removes and returns an entry with minimal key.
@@ -141,8 +164,17 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	 */
 	@Override
 	public Entry<K, V> removeMin() {
-		// TODO
-		return null;
+		
+		if (heap.isEmpty()) {
+			return null;
+		}
+	    Entry<K,V> min = heap.get(0);
+	    // Place our min item at the end of our heap 
+	    swap(0, heap.size() - 1);
+	    // Then we remove the element at the end of the list - our min
+	    heap.remove(heap.size() - 1);
+	    downheap(0);          
+	    return min;
 	}
 
 	public String toString() {
@@ -170,11 +202,11 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 	}
 
 	public static < T > String toBinaryTreeString(PriorityQueue<T> pq) {
-		LinkedBinaryTree<T> bt = new LinkedBinaryTree<>();
-//		bt.createLevelOrder(new ArrayList<T>(pq));
-//		BinaryTreePrinter< T > btp = new BinaryTreePrinter<>(bt);
-//		return btp.print();
-	}
+	   LinkedBinaryTree<T> bt = new LinkedBinaryTree<>();
+       bt.createLevelOrder(new ArrayList<T>(pq));
+       BinaryTreePrinter< T > btp = new BinaryTreePrinter<>(bt);
+       return btp.print();
+	} 
 
 
 	public static void main_jdk(String [] args) {
