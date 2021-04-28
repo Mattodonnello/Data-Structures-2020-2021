@@ -17,9 +17,13 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
 	// private utility
 	/** Returns the index of an entry with equal key, or -1 if none found. */
 	private int findIndex(K key) {
-		// TODO
-
-		return -1;
+		int n = table.size();
+	    for (int x=0; x < n; x++) {
+	      if (table.get(x).getKey().equals(key)) {
+	        return x;
+	      }
+	    }
+	      return -1; // We return -1 if the index was not found
 	}
 
 	// public methods
@@ -42,8 +46,11 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public V get(K key) {
-		// TODO
-		return null;
+		int x = findIndex(key);
+	    if (x == -1) {
+	    	return null;  // If no such entry exists we return null             
+	    }
+	    else return table.get(x).getValue();
 	}
 
 	/**
@@ -58,8 +65,12 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public V put(K key, V value) {
-		// TODO
-		return null;
+		int x = findIndex(key);
+	    if (x == -1) {
+	      table.add(new MapEntry<>(key, value));  // New entry is added
+	      return null;  
+	      } 
+	    else return table.get(x).setValue(value); // We return the previous value associated with the key
 	}
 
 	/**
@@ -72,8 +83,17 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public V remove(K key) {
-		// TODO
-		return null;
+		int x = findIndex(key);
+	    int n = size();
+	    if (x == -1) {
+	    	return null;                       
+	    }
+	    V previousValue = table.get(x).getValue();
+	    if (x != n - 1) {
+	      table.set(x, table.get(n-1));
+	    }
+	    table.remove(n-1);     // we remove the last entry of the table                          
+	    return previousValue; // we return the previous value associated with the removed key
 	}
 
 	// ---------------- nested EntryIterator class ----------------
@@ -81,13 +101,14 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
 		private int j = 0;
 
 		public boolean hasNext() {
-			// TODO
-			return false;
+			return j < table.size();
 		}
 
 		public Entry<K, V> next() {
-			// TODO
-			return null;
+			if (j == table.size()) {
+				throw new NoSuchElementException();
+			}
+		      return table.get(j++);
 		}
 
 		public void remove() {
