@@ -57,7 +57,7 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
     @Override
     @SuppressWarnings({"unchecked"})
     protected void createTable() {
-        // TODO
+    	table = (UnsortedTableMap<K,V>[]) new UnsortedTableMap[capacity];
     }
 
     /**
@@ -70,8 +70,11 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketGet(int h, K k) {
-        // TODO
-        return  null;
+    	UnsortedTableMap<K,V> bucket = table[h];
+		if(bucket == null) {
+			return null; // If no such entry exists
+		}
+		else return bucket.get(k); // return value associated with key k in bucket with hash value h
     }
 
     /**
@@ -85,8 +88,16 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketPut(int h, K k, V v) {
-        // TODO
-        return null;
+    	UnsortedTableMap<K,V> bucket = table[h];
+		if(bucket == null){
+			bucket = table[h] = new UnsortedTableMap<>();
+		}
+		int oldSize = bucket.size();
+		V previousValue = bucket.put(k, v);
+		// Get the differences in the sixes of our new bucket size and old size after put operation
+		int sizeDiff = bucket.size() - oldSize; 
+		n += sizeDiff; // If size has increased, sizeDiff gets added on 
+		return previousValue;
     }
 
     /**
@@ -99,8 +110,15 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketRemove(int h, K k) {
-        // TODO
-        return  null;
+    	UnsortedTableMap<K,V> bucket = table[h];
+        if (bucket == null) {
+        	return null;
+        }
+        int oldSize = bucket.size();
+        V previousValue = bucket.remove(k);
+        int sizeDiff = oldSize - bucket.size();
+        n -= sizeDiff; // In case our size has decreased in value - we need to account for this 
+        return previousValue;
     }
 
     /**
@@ -110,13 +128,14 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     public Iterable<Entry<K, V>> entrySet() {
-		/*
-		for each element in (UnsortedTableMap []) table
-			for each element in bucket:
-				print element
-		*/
-        // TODO
-        return null;
+    	ArrayList<Entry<K,V>> hashtable = new ArrayList<>();
+        for (int h=0; h < capacity; h++) {
+          if (table[h] != null) {
+            for (Entry<K,V> entry : table[h].entrySet())
+            	hashtable.add(entry);
+          }
+        }
+        return hashtable;
     }
 
     public String toString() {
