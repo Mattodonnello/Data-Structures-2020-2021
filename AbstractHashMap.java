@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -112,7 +113,16 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      * Updates the size of the hash table and rehashes all entries.
      */
     private void resize(int newCap) {
-    	// TODO
+    	ArrayList<Entry<K,V>> hashtable = new ArrayList<>(n);
+		for(Entry<K,V> e: entrySet()) {
+			hashtable.add(e);
+		}
+		capacity = newCap; // update our capacity to equal the new capacity
+		createTable();
+		n = 0;
+		for(Entry<K,V> e : hashtable) {
+			put(e.getKey(), e.getValue());
+		}
     }
 
     // protected abstract methods to be implemented by subclasses
