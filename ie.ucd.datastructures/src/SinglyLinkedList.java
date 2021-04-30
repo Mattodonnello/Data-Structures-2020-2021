@@ -1,6 +1,8 @@
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 /**
  * A basic singly linked list implementation.
@@ -19,7 +21,7 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
     	private Node<E> next; // reference to the subsequent node in the list  
 		public Node<E> prev;
     	public Node(E e, Node<E> n) {
-    	    if (e == null) throw new NullPointerException();
+    	    //if (e == null) throw new NullPointerException();
     		element = e;
     		next = n;  
     		} 
@@ -38,7 +40,7 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
 
     // instance variables of the SinglyLinkedList
     private Node<E> head = null; // head node of the list (or null if empty)
-    private Node<E> last = null;
+    private Node<E> tail = null;
     private int size = 0; // number of nodes in the list
 
     public SinglyLinkedList() {
@@ -67,8 +69,7 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
     @Override
     public E get(int i) throws IndexOutOfBoundsException {
     	Node<E> heads = head;
-        int count = 0; /* index of Node we are
-                          currently looking at */
+        int count = 0; // index of current node we are looking at
         while (heads != null)
         {
             if (count == i)
@@ -87,14 +88,14 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
     @Override
     public void add(int i, E e) throws IndexOutOfBoundsException {
        if(i == 0) {
-    	   addFirst(e);
+    	   addFirst(e); // if our index equals zero we just use our add first method
     }
        else if(i<0 || i> size) {
     	   throw new IndexOutOfBoundsException();
        }
        Node<E> curr = head; 
        
-       for(int k =0; k<i-1; ++k) {
+       for(int k =0; k<i-1; ++k) { // We loop through to reassign each node
     	   curr = curr.next;
        }
        curr.next = new Node(e, curr.next); 
@@ -106,7 +107,7 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
     	if (head == null) {
     		throw new RuntimeException("cannot delete");
     		}
-    	if (i == 0) {
+    	if (i == 0) { // If our index is zero we will want rid of our first element 
             head = head.next;
         } else {
             for (int k = 0; k < i - 1; k++) {
@@ -116,26 +117,6 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
         }
     	return current.element;
     }
-    
-    // Function remove - to remove a specified element from a linked list 
-    	/*if (head == null) {
-    		throw new RuntimeException("cannot delete");
-    		}
-    	if (head.getElement().equals(i)) {
-    		head = head.next;
-    		}
-    	Node<E> cur = head;
-    	Node<E> prev = null;
-    	while (cur != null && !cur.getElement().equals(i)) {
-    		prev = cur;
-    		cur = cur.next;
-    		}
-    	if (cur == null) {
-    		throw new RuntimeException("cannot delete");
-    		}
-    	// delete cur node
-    	prev.next = cur.next;	
-        return cur.element; */
 
     /**
      * Returns (but does not remove) the first element of the list
@@ -155,10 +136,8 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
      * @return last node of the list (or null if empty)
      */
     public Node<E> getLast() {
-    	if(last == null) {
-        	return null;
-        }
-        return last;
+    	if (isEmpty( )) return null;
+        return tail;
     }
 
     /**
@@ -167,10 +146,8 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
      * @return element at the end of the list (or null if empty)
      */
     public E last() {
-    	if(last == null) {
-        	return null;
-        }
-        return last.getElement();
+        if (tail.element== null) return null;
+        else return tail.getElement();
     }
 
     // update methods
@@ -181,8 +158,19 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
      * @param e the new element to add
      */
     public void addFirst(E e) {
-    	head = new Node<E>(e, head); 
-    	 ++size; 
+    	Node<E> addFront = new Node<E>(e, head);
+
+    	  if(size() != 0) // As long as our node is not empty
+    	  {
+    	    addFront.next = head;
+    	    head = addFront; // addFront becomes the new head of the list
+    	    size++; 
+    	  } else { // If our node is empty
+    	    head = addFront;
+    	    tail = addFront;
+    	    addFront.next = null;
+    	    size++;
+    	  }
     }
 
     /**
@@ -191,32 +179,27 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
      * @param e the new element to add
      */
     public void addLast(E e) {    
-    Node<E> newest = new Node<E>(e, null); // node will eventually be the tail
-    Node<E> last = head;
-    if(last == null) {
-    	head = newest;    
-    	}
-    else {
-    	while (last.getNext() != null) { // advance to the last node
-    		last = last.getNext();
-    		}
-    	last.setNext(newest); // new node after existing tail
-    	}
-    size++;
+    	Node<E> n = new Node<E>(e, null);
+        if (isEmpty()) // If empty head is our new node n (tail is also n)
+        {  
+        	head = n;
+        }
+        else
+        {  tail.next = n;
+        }
+        tail = n;
+        size++;  // we increment the size
     }
     
     public E removeFirst() {
-     Node<E> cur = head;
-     E e = head.element;
-  if (head.next != null) {
-     head.next.prev = null;
-   }
-    else{
-    last = null;
-    }
-     head = head.next;
-
-  return e;
+    	if (isEmpty( )) return null; // We can't remove anything as our list is empty
+    	E result = head.getElement( );
+    	head = head.getNext( ); // original head is removed and new head becomes originals next 
+    	size--; // we decrement our size
+    	if (size == 0) {
+    	tail = null; // If our list is now empty, our tail is null
+    	}
+    	return result;
     }
     
     public E removeLast(){
@@ -229,18 +212,19 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
         	temp = temp.next;
         }
         temp.next=null;
-        return head.element;
+        return tail.element; 
     }
 
     @SuppressWarnings({"unchecked"})
     public boolean equals(Object o) {
-        // TODO
-        return false;   // if we reach this, everything matched successfully
+    	if (this == o) {
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings({"unchecked"})
     public SinglyLinkedList<E> clone() throws CloneNotSupportedException {
-        // TODO
         return null;
     }
 
@@ -252,8 +236,8 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
     
     public String toString() {
         Node <E> curr = head;
-        StringBuilder sb = new StringBuilder();
-        sb.append("["); 
+        StringBuilder sb = new StringBuilder(); // create our stringBuilder 
+        sb.append("[");  
         while(curr.next!=null) {
         	sb.append(curr.getElement());
         	sb.append(", ");
@@ -263,13 +247,13 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
         	sb.append(curr.getElement());
         }
         sb.append("]");
-        return sb.toString();
+        return sb.toString(); // return stringBuilder in string form
     }	
     
     
 
     private class SinglyLinkedListIterator<E> implements Iterator<E> {
-        Node<E> curr = (Node<E>) head;
+        private Node<E> curr = new Node(head.element, head.next);
         @Override
         public boolean hasNext() {
            return curr.next == null;
@@ -338,4 +322,3 @@ public class SinglyLinkedList<E> implements Cloneable, Iterable<E>, List<E>{
         }  
     }
 }
-
