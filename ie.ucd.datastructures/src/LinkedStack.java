@@ -15,10 +15,10 @@ public class LinkedStack<E> implements Stack<E> {
 		}
 		sb.append(list.get(list.size() - 1));
 		sb.append("]");
-		for(int i=0; i<list.size(); i++) {
+		/*for(int i=0; i<list.size(); i++) {
 		sb.append(list.get(i));
 		sb.append(", ");	
-		}
+		} */
 
 		return sb.toString();
 	}
