@@ -1,9 +1,10 @@
 import java.util.List;
-import java.util.TreeMap;
+//import java.util.TreeMap;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 /**
  * An implementation of a sorted map using an AVL tree.
@@ -61,32 +62,37 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      * Returns the height of the given tree position.
      */
     protected int height(Position<Entry<K, V>> p) {
-        // TODO
-        return 0;
+    	return tree.getAux(p);
     }
 
     /**
      * Recomputes the height of the given position based on its children's heights.
      */
     protected void recomputeHeight(Position<Entry<K, V>> p) {
-        // TODO
-        return;
+    	tree.setAux(p, 1 + Math.max(height(left(p)), height(right(p))));
     }
 
     /**
      * Returns whether a position has balance factor between -1 and 1 inclusive.
      */
     protected boolean isBalanced(Position<Entry<K, V>> p) {
-        // TODO
-        return false;
+    	return Math.abs(height(left(p)) - height(right(p))) <= 1;
     }
 
     /**
      * Returns a child of p with height no smaller than that of the other child.
      */
     protected Position<Entry<K, V>> tallerChild(Position<Entry<K, V>> p) {
-        // TODO
-        return null;
+    	if (height(left(p)) > height(right(p))) { // left is clearly taller
+    		return left(p);    
+    	}
+        if (height(left(p)) < height(right(p))) { // right is clearly taller
+        	return right(p);   
+        }
+        //If height is the same we need to use other ways to detect the taller child
+        if (isRoot(p)) return left(p);                
+        if (p == left(parent(p))) return left(p);     
+        else return right(p);
     }
 
     /**
@@ -95,8 +101,19 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      * imbalance is found, continuing until balance is restored.
      */
     protected void rebalance(Position<Entry<K, V>> p) {
-        // TODO
-        return ;
+    	int oldH, newH;
+        do {
+          oldH = height(p);                
+          if (!isBalanced(p)) {                        
+            // perform trinode restructuring until balance is restored
+            p = restructure(tallerChild(tallerChild(p)));
+            recomputeHeight(left(p));
+            recomputeHeight(right(p));
+          }
+          recomputeHeight(p);
+          newH = height(p);
+          p = parent(p);
+        } while (p != null && oldH != newH);
     }
 
     /**
@@ -112,8 +129,9 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     @Override
     protected void rebalanceDelete(Position<Entry<K, V>> p) {
-        // TODO
-        return;
+    	if (!isRoot(p)) {
+    	      rebalance(parent(p));
+    }
     }
 
     /**
@@ -135,8 +153,8 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
     }
 
     public String toBinaryTreeString() {
-        //BinaryTreePrinter<TreeMap.Entry<K, V>> btp = new BinaryTreePrinter<>(this.tree);
-        //return btp.print();
-        return null;
+        BinaryTreePrinter<Entry<K, V>> btp = new BinaryTreePrinter<>(this.tree);
+        return btp.print();
+        //return null;
     }
 }

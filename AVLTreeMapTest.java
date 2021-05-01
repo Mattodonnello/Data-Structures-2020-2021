@@ -58,7 +58,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(1, map.firstEntry().getKey());
 	}
 
@@ -71,7 +71,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(35, map.lastEntry().getKey());
 	}
 
@@ -84,9 +84,9 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(12, map.ceilingEntry(11).getKey());
-		
+
 		assertEquals(2, map.ceilingEntry(2).getKey());
 	}
 
@@ -99,7 +99,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(5, map.floorEntry(11).getKey());
 		assertEquals(5, map.floorEntry(5).getKey());
 	}
@@ -113,7 +113,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(23, map.lowerEntry(24).getKey());
 		assertEquals(26, map.lowerEntry(31).getKey());
 	}
@@ -127,7 +127,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-		
+
 		assertEquals(12, map.higherEntry(11).getKey());
 	}
 
@@ -156,7 +156,7 @@ class AVLTreeMapTest {
 		for(Integer i : arr) {
 			map.put(i, Integer.toString(i));
 		}
-				
+
 		//assertEquals("[12, 15, 21, 23, 24, 26, 33]",map.subMap(12, 34).keySet().toString());
 	}
 
